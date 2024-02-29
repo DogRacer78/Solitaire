@@ -1,0 +1,42 @@
+.grid-container{
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto auto;
+    grid-auto-rows: 1fr;
+    column-gap: 2%;
+    row-gap: 2%;
+    width: 50%;
+    margin: 0 auto;
+    position: relative;
+}
+
+.grid-item{
+    background-color: gray;
+    border: 1px solid black;
+}
+
+.card-pile{
+    position: absolute;
+    left: 0px;
+    background-color: white;
+    width: 100px;
+    margin: 0;
+}
+
+img{
+    width: 100px;
+}
+
+.game{
+    position: relative;
+    text-align: center;
+    width: 50%;
+    margin: 0 auto;
+}
+
+.playing-cards{
+    position: absolute;
+    top: 150px;
+    margin: 0 auto;
+}
+
+
