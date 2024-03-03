@@ -8,20 +8,25 @@ class Card {
      * @param {number} top Top coordinate of the card
      * @param {number} left Left coordinate of the card
      */
-    constructor(name, imagePath, top, left, clickEvent) {
+    constructor(name, imagePath, value, suit, ondrop, ondragstart, onclick) {
         this.name = name;
-        this.top = top;
-        this.left = left;
+        this.top = 0;
+        this.left = 0;
         this.imagePath = imagePath;
+
+        this.cardType = new CardType(suit, value);
 
         this.element = document.createElement("img");
         this.element.src = imagePath;
         this.element.className = "playing-cards";
-        this.element.style.top = top + "px";
-        this.element.style.left = left + "px";
+        this.element.style.top = this.top + "px";
+        this.element.style.left = this.left + "px";
         this.element.style.zIndex = 1;
         this.element.hidden = true;
-        this.element.onclick = clickEvent.bind(this);
+        this.element.ondragstart = ondragstart.bind(this);
+        this.element.ondrop = ondrop.bind(this);
+        this.element.onclick = onclick.bind(this);
+        this.element.ondragover = (event) => { event.preventDefault() };
 
         this.faceUp = false;
         this.element.src = Card.backCardImage;
@@ -36,6 +41,7 @@ class Card {
         this.left = pos;
         this.element.style.left = pos + "px";
         this.element.style.zIndex = zIndex;
+        this.setFaceUp();
         this.element.hidden = false;
     }
 

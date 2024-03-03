@@ -20,6 +20,7 @@
     background-color: white;
     width: 100px;
     margin: 0;
+    border-radius: 10px;
 }
 
 img{
@@ -39,4 +40,18 @@ img{
     margin: 0 auto;
 }
 
+.completed-pile{
+    position: absolute;
+    margin: 0 auto;
+    z-index: 1000;
+    background-color: white;
+    border-radius: 10px;
+}
 
+.empty-space{
+    position: absolute;
+    background-color: orange;
+    z-index: -1;
+    margin: 0 auto;
+    border-radius: 10px;
+}
