@@ -17,7 +17,7 @@ class Card {
         this.cardType = new CardType(suit, value);
 
         this.element = document.createElement("img");
-        this.element.src = imagePath;
+        this.element.src = images[this.name];
         this.element.className = "playing-cards";
         this.element.style.top = this.top + "px";
         this.element.style.left = this.left + "px";
@@ -27,6 +27,9 @@ class Card {
         this.element.ondrop = ondrop.bind(this);
         this.element.onclick = onclick.bind(this);
         this.element.ondragover = (event) => { event.preventDefault() };
+        this.element.ondragenter = (event) => { event.preventDefault() };
+        this.element.ondragleave = (event) => { event.preventDefault() };
+        this.element.ondragend = (event) => { event.preventDefault() };
 
         this.faceUp = false;
         this.element.src = Card.backCardImage;
@@ -74,6 +77,11 @@ class Card {
     show()
     {
         this.element.hidden = false;
+    }
+
+    hide()
+    {
+        this.element.hidden = true;
     }
 
     setFaceDown()

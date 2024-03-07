@@ -9,9 +9,71 @@ const xSpacing = 20;
 const ySpacing = 40;
 let cardPilesLevel = 0;
 
+const images = {};
+
+function loadImages()
+{
+    for (let i = 2; i < 11; i++)
+    {
+        images[i + " of Spades"] = new Image();
+        images[i + " of Spades"].src = "Images/" + i + "_of_spades.png";
+        images[i + " of Clubs"] = new Image();
+        images[i + " of Clubs"].src = "Images/" + i + "_of_clubs.png";
+        images[i + " of Hearts"] = new Image();
+        images[i + " of Hearts"].src = "Images/" + i + "_of_hearts.png";
+        images[i + " of Diamonds"] = new Image();
+        images[i + " of Diamonds"].src = "Images/" + i + "_of_diamonds.png";
+    }
+
+    images["Jack of Spades"] = new Image();
+    images["Jack of Spades"].src = "Images/jack_of_spades2.png";
+    images["Jack of Clubs"] = new Image();
+    images["Jack of Clubs"].src = "Images/jack_of_clubs2.png";
+    images["Jack of Hearts"] = new Image();
+    images["Jack of Hearts"].src = "Images/jack_of_hearts2.png";
+    images["Jack of Diamonds"] = new Image();
+    images["Jack of Diamonds"].src = "Images/jack_of_diamonds2.png";
+
+    images["Queen of Spades"] = new Image();
+    images["Queen of Spades"].src = "Images/queen_of_spades2.png";
+    images["Queen of Clubs"] = new Image();
+    images["Queen of Clubs"].src = "Images/queen_of_clubs2.png";
+    images["Queen of Hearts"] = new Image();
+    images["Queen of Hearts"].src = "Images/queen_of_hearts2.png";
+    images["Queen of Diamonds"] = new Image();
+
+    images["King of Spades"] = new Image();
+    images["King of Spades"].src = "Images/king_of_spades2.png";
+    images["King of Clubs"] = new Image();
+    images["King of Clubs"].src = "Images/king_of_clubs2.png";
+    images["King of Hearts"] = new Image();
+    images["King of Hearts"].src = "Images/king_of_hearts2.png";
+    images["King of Diamonds"] = new Image();
+    images["King of Diamonds"].src = "Images/king_of_diamonds2.png";
+
+    images["Ace of Spades"] = new Image();
+    images["Ace of Spades"].src = "Images/ace_of_spades.png";
+    images["Ace of Clubs"] = new Image();
+    images["Ace of Clubs"].src = "Images/ace_of_clubs.png";
+    images["Ace of Hearts"] = new Image();
+    images["Ace of Hearts"].src = "Images/ace_of_hearts.png";
+    images["Ace of Diamonds"] = new Image();
+    images["Ace of Diamonds"].src = "Images/ace_of_diamonds.png";
+
+    images["back"] = new Image();
+    images["back"].src = "Images/back.png";
+}
+
+// load the images
+loadImages();
+
 // using the images directory, iterate through and gather all the cards
 window.onload = () => 
 {
+    let back = document.getElementById("card-back");
+    back.src = images["back"].src;
+    back.hidden = false;
+
     let board = document.getElementById("game");
     console.log(board);
     // all the numbered cards
@@ -250,7 +312,9 @@ function clickCard(event)
     }
 }
 
-document.getElementById("card-back").onclick = (e) => 
+document.getElementById("card-back").onclick = clickDeck;
+
+function clickDeck(e)
 {
     console.log("Card back clicked");
     // flip the card at the top of the deck and move it to the left
@@ -261,8 +325,22 @@ document.getElementById("card-back").onclick = (e) =>
 
     if (cards.length == 0)
     {
-        e.target.hidden = true;
+        e.target.src = "Images/refresh.png";
+        e.target.onclick = reShuffleCards;
     }
+}
+
+function reShuffleCards(event)
+{
+    while (cardPiles[0].length > 0)
+    {
+        let card = cardPiles[0].pop();
+        card.hide();
+        cards.push(card);
+    }
+    shuffle(cards);
+    event.target.src = "Images/back.png";
+    event.target.onclick = clickDeck;
 }
 
 /**
