@@ -5,9 +5,17 @@ let cardPiles = [[],[],[],[],[],[],[],[]];
 let completedPiles = {};
 let emptySpaces = {};
 // spacing
-const xSpacing = 20;
-const ySpacing = 40;
-let cardPilesLevel = 0;
+const largeSpacing = 20;
+const smallSpacing = 10;
+const largeImgWidth = 100;
+const largeImgHeight = 145;
+const smallImgWidth = 70;
+const smallImgHeight = 101;
+let currentImgWidth = largeImgWidth;
+let currentImgHeight = largeImgHeight
+let xSpacing = largeSpacing;
+let ySpacing = 20;
+let cardPilesLevel = largeImgHeight + ySpacing;
 
 const images = {};
 
@@ -62,10 +70,15 @@ function loadImages()
 
     images["back"] = new Image();
     images["back"].src = "Images/back.png";
+
+    images["refresh"] = new Image();
+    images["refresh"].src = "Images/refresh.png";
 }
 
 // load the images
 loadImages();
+
+let mediaQuery = window.matchMedia("screen and ((max-width: 830px) or (max-height: 440px))");
 
 // using the images directory, iterate through and gather all the cards
 window.onload = () => 
@@ -129,7 +142,7 @@ window.onload = () =>
 
     shuffle(cards);
 
-    cardPilesLevel = document.getElementById("card-back").height + ySpacing;
+    //cardPilesLevel = document.getElementById("card-back").height + ySpacing;
     document.getElementById("card-back").addEventListener("dragstart", (e) => {
         e.preventDefault();
     });
@@ -141,7 +154,7 @@ window.onload = () =>
         for (let j = 0; j < i; j++)
         {
             let currentCard = cards[cards.length - 1];
-            currentCard.setPos(cardPilesLevel + (j * ySpacing), (i - 1) + (100 + xSpacing) * (i - 1));
+            currentCard.setPos(cardPilesLevel + (j * ySpacing), (i - 1) + (currentImgWidth + xSpacing) * (i - 1));
             currentCard.setZIndex(j);
             if (j == i - 1)
             {
@@ -202,8 +215,16 @@ window.onload = () =>
         emptySpace.style.top = cardPiles[i][0].top + "px";
         emptySpace.style.width = divWidth + "px";
         emptySpace.style.height = divHeight + "px";
-        emptySpaces["empty-space-" + i] = { pileId : i };
+        emptySpaces["empty-space-" + i] = {};
+        emptySpaces["empty-space-" + i].pileId = i;
+        emptySpaces["empty-space-" + i].element = emptySpace;
+
+        //console.log(emptySpaces["empty-space-" + i]);
     }
+
+    onMediaResize(mediaQuery);
+
+    mediaQuery.addEventListener("change", () => onMediaResize(mediaQuery));
 }
 
 /**
@@ -325,7 +346,7 @@ function clickDeck(e)
 
     if (cards.length == 0)
     {
-        e.target.src = "Images/refresh.png";
+        e.target.src = images["refresh"].src;
         e.target.onclick = reShuffleCards;
     }
 }
@@ -339,7 +360,7 @@ function reShuffleCards(event)
         cards.push(card);
     }
     shuffle(cards);
-    event.target.src = "Images/back.png";
+    event.target.src = images["back"].src;
     event.target.onclick = clickDeck;
 }
 
@@ -449,4 +470,76 @@ function shuffle(array) {
     }
   
     return array;
+}
+
+function resizeElements()
+{
+    let divHeight = currentImgHeight;
+    let divWidth = currentImgWidth;
+
+    // reposition the empty spaces
+    for (let i = 1; i < 8; i++)
+    {
+        let emptySpace = emptySpaces["empty-space-" + i].element;
+        emptySpace.style.left = (i - 1) + (currentImgWidth + xSpacing) * (i - 1) + "px";
+        emptySpace.style.top = cardPilesLevel + "px";
+        emptySpace.style.width = divWidth + "px";
+        emptySpace.style.height = divHeight + "px";
+    }
+
+    // reposition the completed piles
+    for (let i = 1; i < 5; i++)
+    {
+        let completedPile = completedPiles["completed-pile-" + i].element;
+        // idk why but the + 3 is needed to make it look right
+        let left = (i + 2) * (currentImgWidth + xSpacing) + 3;
+        completedPile.style.left = left + "px";
+        completedPile.style.width = divWidth + "px";
+        completedPile.style.height = divHeight + "px";
+
+        let pile = completedPiles["completed-pile-" + i].cards;
+        // the cards in the completed pile
+        for (let j = 0; j < pile.length; j++)
+        {
+            let currentCard = pile[j];
+            currentCard.setPos(0, left);
+        }
+
+    }
+
+    for (let i = 1; i < cardPiles.length; i++)
+    {
+        for (let j = 0; j < cardPiles[i].length; j++)
+        {
+            let currentCard = cardPiles[i][j];
+            currentCard.setPos(cardPilesLevel + (j * ySpacing), (i - 1) + (currentImgWidth + xSpacing) * (i - 1));
+        }
+    }
+
+    // the deck pile
+    for (let i = 0; i < cardPiles[0].length; i++)
+    {
+        let currentCard = cardPiles[0][i];
+        currentCard.setPos(currentCard.top, currentImgWidth + xSpacing);
+    }
+
+}
+
+function onMediaResize(x)
+{
+    if (x.matches)
+    {
+        xSpacing = smallSpacing;
+        currentImgWidth = smallImgWidth;
+        currentImgHeight = smallImgHeight;
+        cardPilesLevel = smallImgHeight + ySpacing;
+    }
+    else
+    {
+        xSpacing = largeSpacing;
+        currentImgWidth = largeImgWidth;
+        currentImgHeight = largeImgHeight;
+        cardPilesLevel = largeImgHeight + ySpacing;
+    }
+    resizeElements();
 }

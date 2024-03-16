@@ -1,37 +1,29 @@
-.grid-container{
-    display: grid;
-    grid-template-columns: auto auto auto auto auto auto auto;
-    grid-auto-rows: 1fr;
-    column-gap: 2%;
-    row-gap: 2%;
-    width: 50%;
-    margin: 0 auto;
-    position: relative;
-}
-
-.grid-item{
-    background-color: gray;
-    border: 1px solid black;
+:root{
+    --size: 100px;
 }
 
 .card-pile{
     position: absolute;
     left: 0px;
     background-color: transparent;
-    width: 100px;
+    width: var(--size);
     margin: 0;
     border-radius: 10px;
 }
 
 img{
-    width: 100px;
+    width: var(--size);
+}
+
+body{
+    background-color: rgb(1, 77, 1);
 }
 
 .game{
     position: relative;
     text-align: center;
-    width: 50%;
     margin: 0 auto;
+    background-color: pink;
 }
 
 .playing-cards{
@@ -60,4 +52,14 @@ footer{
     position: fixed;
     bottom: 0;
     background-color: white;
+}
+
+@media screen and ((max-width: 830px) or (max-height: 440px)) {
+    :root{
+        --size: 70px;
+    }
+
+    body{
+        background-color: rgb(77, 1, 1);
+    }
 }

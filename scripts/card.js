@@ -1,6 +1,6 @@
 
 class Card {
-    static backCardImage = "Images/back.png";
+    static backCardImage = "back";
 
     /**
      * 
@@ -17,7 +17,7 @@ class Card {
         this.cardType = new CardType(suit, value);
 
         this.element = document.createElement("img");
-        this.element.src = images[this.name];
+        this.element.src = images[this.name].src;
         this.element.className = "playing-cards";
         this.element.style.top = this.top + "px";
         this.element.style.left = this.left + "px";
@@ -32,7 +32,7 @@ class Card {
         this.element.ondragend = (event) => { event.preventDefault() };
 
         this.faceUp = false;
-        this.element.src = Card.backCardImage;
+        this.element.src = images[Card.backCardImage].src;
     }
 
     getHTMLString() {
